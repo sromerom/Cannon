@@ -9,9 +9,12 @@ public class CannonGame extends BasicGame {
     private Image cannonImage;
     private Image targetImage;
     private Image cloudImage;
+
+    private UnicodeFont fontMarcador;
+
     private Image ballImage;
     private Cannon cannon = new Cannon();
-
+    private double anteriorAngle = this.cannon.getRotation();
 
     public CannonGame(String title) {
         super(title);
@@ -22,9 +25,12 @@ public class CannonGame extends BasicGame {
         this.landscapeImage = ResourceManager.getImage("landscape.jpg");
         this.cannonBaseImage = ResourceManager.getImage("cannon_base.png");
         this.cannonImage = ResourceManager.getImage("cannon.png");
+        this.cannonImage.setCenterOfRotation((this.cannonImage.getWidth() / 2) / 2, this.cannonImage.getHeight() / 2);
         this.targetImage = ResourceManager.getImage("target.png");
         this.cloudImage = ResourceManager.getImage("cloud.png");
         this.ballImage = ResourceManager.getImage("ball.png");
+
+        this.fontMarcador = ResourceManager.getFont("WHITRABT.TTF", 20);
     }
 
     @Override
@@ -36,12 +42,22 @@ public class CannonGame extends BasicGame {
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         this.landscapeImage.draw(0, 0);
 
-        //this.cannonImage.setCenterOfRotation(this.cannonImage.getWidth() * 1 / 2, this.cannonImage.getHeight() * 1 / 2);
-        this.cannonImage.rotate((float)cannon.getRotation());
-        System.out.println(cannon.getRotation());
+        //System.out.println(cannon.getRotation());
+        this.cannonImage.rotate((float) cannon.getRotation());
+
         this.cannonImage.draw(42, 470);
         this.cannonBaseImage.draw(42, 490);
         this.cloudImage.draw(570, 70);
         this.targetImage.draw(780, 500);
+
+        //Marcadors
+        this.fontMarcador.drawString(20, 45, "Strenth: " + this.cannon.getStrength());
+        this.fontMarcador.drawString(492, 45, "Angle: " + this.cannon.getRotation());
+        this.fontMarcador.drawString(850, 45, "Score: ");
+
+        //Reiniciam la rotacio actual
+        this.cannonImage.rotate((float) -cannon.getRotation());
+        //cannon.setRotation(0);
+        //this.cannonImage.rotate(0);
     }
 }
