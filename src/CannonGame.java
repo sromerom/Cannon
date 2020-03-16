@@ -42,24 +42,24 @@ public class CannonGame extends BasicGame {
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         this.target.render(gameContainer, graphics);
-        //this.landscapeImage.draw(0, 0);
+        this.landscapeImage.draw(0, 0);
 
         //System.out.println(cannon.getRotation());
-        //this.cannonImage.rotate((float) cannon.getRotation());
+        this.cannonImage.rotate((float) cannon.getRotation());
 
-        //this.cannonImage.draw(42, 470);
-        //this.cannonBaseImage.draw(42, 490);
-        //this.cloudImage.draw(570, 70);
+        this.cannonImage.draw(42, 470);
+        this.cannonBaseImage.draw(42, 490);
+        this.cloudImage.draw(570, 70);
         //this.targetImage.draw(780, 500);
-        //this.targetImage.draw((float)target.getPositionX(), 500);
+        this.targetImage.draw((float) target.getPositionX(), 500);
 
         //Marcadors
         this.fontMarcador.drawString(20, 45, "Strenth: " + this.cannon.getStrength());
-        this.fontMarcador.drawString(492, 45, "Angle: " + this.cannon.getRotation());
+        this.fontMarcador.drawString(492, 45, "Angle: " + -(this.cannon.getRotation()));
         this.fontMarcador.drawString(850, 45, "Score: ");
 
         //Reiniciam la rotacio actual
-        this.cannonImage.rotate((float) -cannon.getRotation());
+        this.cannonImage.rotate((float) -(this.cannon.getRotation()));
         //cannon.setRotation(0);
         //this.cannonImage.rotate(0);
     }

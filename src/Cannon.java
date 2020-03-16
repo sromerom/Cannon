@@ -22,8 +22,10 @@ public class Cannon {
             System.out.println("Disminuimos angulo");
             //System.out.println(this.rotation);
         } else if (mou.isKeyDown(Input.KEY_UP)) {
+            System.out.println("Augmentamos fuerza");
             updateStrength(0.5);
         } else if (mou.isKeyDown(Input.KEY_DOWN)) {
+            System.out.println("Disminuimos fuerza");
             updateStrength(-0.5);
         } else if(mou.isKeyPressed(Input.KEY_SPACE)) {
             System.out.println("Piiuum");
@@ -39,9 +41,11 @@ public class Cannon {
         }
 
         //Posam que la força pugui ser un maxim de 100 i un minim de 0
+
         if (this.strength < 10) {
-            this.strength = 0;
+            this.strength = 10;
         }
+
 
         if (this.strength > 100) {
             this.strength = 100;
