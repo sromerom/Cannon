@@ -25,6 +25,8 @@ public class Cannon {
             updateStrength(0.5);
         } else if (mou.isKeyDown(Input.KEY_DOWN)) {
             updateStrength(-0.5);
+        } else if(mou.isKeyPressed(Input.KEY_SPACE)) {
+            System.out.println("Piiuum");
         }
 
         //Posam que el graus maxim sempre siguin 90 i el menor sigui 0
@@ -37,7 +39,7 @@ public class Cannon {
         }
 
         //Posam que la força pugui ser un maxim de 100 i un minim de 0
-        if (this.strength < 0) {
+        if (this.strength < 10) {
             this.strength = 0;
         }
 

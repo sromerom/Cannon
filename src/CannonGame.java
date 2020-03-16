@@ -14,7 +14,7 @@ public class CannonGame extends BasicGame {
 
     private Image ballImage;
     private Cannon cannon = new Cannon();
-    private double anteriorAngle = this.cannon.getRotation();
+    private Target target = new Target();
 
     public CannonGame(String title) {
         super(title);
@@ -35,20 +35,23 @@ public class CannonGame extends BasicGame {
 
     @Override
     public void update(GameContainer gameContainer, int i) throws SlickException {
-        cannon.update(gameContainer, i);
+        this.cannon.update(gameContainer, i);
+        this.target.update(gameContainer, i);
     }
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
-        this.landscapeImage.draw(0, 0);
+        this.target.render(gameContainer, graphics);
+        //this.landscapeImage.draw(0, 0);
 
         //System.out.println(cannon.getRotation());
-        this.cannonImage.rotate((float) cannon.getRotation());
+        //this.cannonImage.rotate((float) cannon.getRotation());
 
-        this.cannonImage.draw(42, 470);
-        this.cannonBaseImage.draw(42, 490);
-        this.cloudImage.draw(570, 70);
-        this.targetImage.draw(780, 500);
+        //this.cannonImage.draw(42, 470);
+        //this.cannonBaseImage.draw(42, 490);
+        //this.cloudImage.draw(570, 70);
+        //this.targetImage.draw(780, 500);
+        //this.targetImage.draw((float)target.getPositionX(), 500);
 
         //Marcadors
         this.fontMarcador.drawString(20, 45, "Strenth: " + this.cannon.getStrength());
