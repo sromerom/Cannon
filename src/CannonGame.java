@@ -37,9 +37,9 @@ public class CannonGame extends BasicGame {
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
 
         this.landscape.render();
+        this.ball.render();
         this.cannon.render();
         this.target.render();
-        this.ball.render();
 
         //Marcadors
         this.fontMarcador.drawString(20, 45, "Strenth: " + this.cannon.getStrength());

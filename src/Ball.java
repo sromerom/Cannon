@@ -14,7 +14,8 @@ public class Ball {
     public double y =  470;
 
     public void render(){
-        this.ballImage.draw(130, 490);
+        //this.cannonBaseImage.draw(42, 490);
+        this.ballImage.draw(52, 490);
     }
 
     public void update() {

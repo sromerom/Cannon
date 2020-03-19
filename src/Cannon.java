@@ -1,7 +1,7 @@
 import org.newdawn.slick.*;
 
 public class Cannon {
-    private Image cannonImage =ResourceManager.getImage("cannon.png");
+    private Image cannonImage = ResourceManager.getImage("cannon.png");
     private Image cannonBaseImage = ResourceManager.getImage("cannon_base.png");
 
     private double rotation = 0;
@@ -19,19 +19,17 @@ public class Cannon {
         Input mou = gameContainer.getInput();
         if (mou.isKeyDown(Input.KEY_LEFT)) {
             updateRotation(-0.5);
-            //System.out.println(this.rotation);
             System.out.println("Augmentamos angulo");
         } else if (mou.isKeyDown(Input.KEY_RIGHT)) {
             updateRotation(0.5);
             System.out.println("Disminuimos angulo");
-            //System.out.println(this.rotation);
         } else if (mou.isKeyDown(Input.KEY_UP)) {
             System.out.println("Augmentamos fuerza");
             updateStrength(0.5);
         } else if (mou.isKeyDown(Input.KEY_DOWN)) {
             System.out.println("Disminuimos fuerza");
             updateStrength(-0.5);
-        } else if(mou.isKeyPressed(Input.KEY_SPACE)) {
+        } else if (mou.isKeyPressed(Input.KEY_SPACE)) {
             System.out.println("Piiuum");
             fire();
         }
@@ -63,7 +61,6 @@ public class Cannon {
     }
 
     public void updateRotation(double deltaRotation) {
-        //this.rotation += deltaRotation / 10;
         this.rotation = this.rotation + deltaRotation;
     }
 
