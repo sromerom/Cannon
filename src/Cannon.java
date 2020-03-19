@@ -1,14 +1,18 @@
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 
 public class Cannon {
+    private Image cannonImage =ResourceManager.getImage("cannon.png");
+    private Image cannonBaseImage = ResourceManager.getImage("cannon_base.png");
+
     private double rotation = 0;
     private double strength = 0;
 
-    public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
-
+    public void render() {
+        this.cannonImage.setCenterOfRotation((this.cannonImage.getWidth() / 2) / 2, this.cannonImage.getHeight() / 2);
+        this.cannonImage.rotate((float) this.rotation);
+        this.cannonImage.draw(42, 470);
+        this.cannonBaseImage.draw(42, 490);
+        this.cannonImage.rotate((float) -(this.rotation));
     }
 
     public void update(GameContainer gameContainer, int i) {
@@ -29,6 +33,7 @@ public class Cannon {
             updateStrength(-0.5);
         } else if(mou.isKeyPressed(Input.KEY_SPACE)) {
             System.out.println("Piiuum");
+            fire();
         }
 
         //Posam que el graus maxim sempre siguin 90 i el menor sigui 0
@@ -53,12 +58,11 @@ public class Cannon {
 
     }
 
-    public void fire() {
-
+    public Ball fire() {
+        return new Ball();
     }
 
     public void updateRotation(double deltaRotation) {
-        //this.rotation +=delta/10;
         //this.rotation += deltaRotation / 10;
         this.rotation = this.rotation + deltaRotation;
     }
