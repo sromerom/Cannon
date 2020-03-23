@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 public class CannonGame extends BasicGame {
 
     private UnicodeFont fontMarcador;
-
     private Landscape landscape;
     private Cannon cannon;
     private Target target;
@@ -30,7 +29,7 @@ public class CannonGame extends BasicGame {
         this.landscape.update();
         this.cannon.update(gameContainer, i);
         this.target.update();
-        this.ball.update();
+        this.ball.update(this.cannon.getRotation(), this.cannon.getStrength(), i);
     }
 
     @Override

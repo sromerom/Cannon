@@ -12,6 +12,8 @@ public class Cannon {
         this.cannonImage.rotate((float) this.rotation);
         this.cannonImage.draw(42, 470);
         this.cannonBaseImage.draw(42, 490);
+
+        //
         this.cannonImage.rotate((float) -(this.rotation));
     }
 
@@ -19,12 +21,12 @@ public class Cannon {
         Input mou = gameContainer.getInput();
         if (mou.isKeyDown(Input.KEY_LEFT)) {
             updateRotation(-0.5);
-            System.out.println("Augmentamos angulo");
+            System.out.println("Aumentamos angulo");
         } else if (mou.isKeyDown(Input.KEY_RIGHT)) {
             updateRotation(0.5);
             System.out.println("Disminuimos angulo");
         } else if (mou.isKeyDown(Input.KEY_UP)) {
-            System.out.println("Augmentamos fuerza");
+            System.out.println("Aumentamos fuerza");
             updateStrength(0.5);
         } else if (mou.isKeyDown(Input.KEY_DOWN)) {
             System.out.println("Disminuimos fuerza");
@@ -32,6 +34,7 @@ public class Cannon {
         } else if (mou.isKeyPressed(Input.KEY_SPACE)) {
             System.out.println("Piiuum");
             fire();
+
         }
 
         //Posam que el graus maxim sempre siguin 90 i el menor sigui 0

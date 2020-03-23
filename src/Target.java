@@ -7,10 +7,11 @@ public class Target {
     private Image targetImage = ResourceManager.getImage("target.png");;
     private double positionX;
     private boolean hit;
-    private int maxim = 890;
-    private int minim = 225;
-    private int range = maxim - minim + 1;
-    private int rand = (int) (Math.random() * range) + minim;
+    private final int MAXIM = 890;
+    private final int MINIM = 225;
+    private int range = MAXIM - MINIM + 1;
+    private int rand = (int) (Math.random() * range) + MINIM;
+
     public void render() throws SlickException {
         this.targetImage.draw((float) this.positionX, 500);
     }
@@ -20,7 +21,7 @@ public class Target {
     }
 
     public boolean hit() {
-        return true;
+        return false;
     }
 
     public void reset() {
