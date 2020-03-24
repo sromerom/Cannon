@@ -31,12 +31,13 @@ public class Cannon {
         } else if (mou.isKeyDown(Input.KEY_DOWN)) {
             System.out.println("Disminuimos fuerza");
             updateStrength(-0.5);
-        } else if (mou.isKeyPressed(Input.KEY_SPACE)) {
+        }/*
+        else if (mou.isKeyPressed(Input.KEY_SPACE)) {
             System.out.println("Piiuum");
             fire();
 
         }
-
+        */
         //Posam que el graus maxim sempre siguin 90 i el menor sigui 0
         if (this.rotation < -90) {
             this.rotation = -90;
@@ -60,7 +61,7 @@ public class Cannon {
     }
 
     public Ball fire() {
-        return new Ball();
+        return new Ball(this.rotation, this.strength);
     }
 
     public void updateRotation(double deltaRotation) {
