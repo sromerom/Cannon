@@ -1,9 +1,6 @@
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 public class Ball {
@@ -11,8 +8,8 @@ public class Ball {
     private Target target;
     private Shape colisioBall;
 
-    private static final double INICIALX = 42;
-    private static final double INICIALY = 490;
+    private double inicialX = 42;
+    private double inicialY = 490;
     private double posicioX = 0;
     private double posicioY = 0;
     private double frame = 0;
@@ -22,7 +19,7 @@ public class Ball {
     public Ball(double angle, double strength) {
         this.angle = angle;
         this.strength = strength;
-        colisioBall = new Circle((float)INICIALX, (float)INICIALY, ballImage.getWidth() / 2);
+        colisioBall = new Circle((float) inicialX, (float) inicialY, ballImage.getWidth() / 2);
     }
 
     public void render(Graphics g) {
@@ -31,21 +28,21 @@ public class Ball {
     }
 
     public void update() {
-        System.out.println(this.posicioX + "," + this.posicioY);
+        //System.out.println(this.posicioX + "," + this.posicioY);
         double angleActual = this.angle * -1 * Math.PI / 180f;
         double grav = (-9.8) * -1;
         //Calculam la velocitat tant per la part vertical com la horizontal
         double vx = this.strength * Math.cos(angleActual);
         double vy = (this.strength * Math.sin(angleActual)) * -1;
 
-        System.out.println(frame);
+        //System.out.println(frame);
 
-        this.posicioX = INICIALX + vx * frame;
-        this.posicioY = INICIALY + vy * frame + grav * frame * frame / 2f;
+        this.posicioX = inicialX + vx * frame;
+        this.posicioY = inicialY + vy * frame + grav * frame * frame / 2f;
 
         //Actualitzam el shape de colisions
-        this.colisioBall.setX((float)this.posicioX);
-        this.colisioBall.setY((float)this.posicioY);
+        this.colisioBall.setX((float) this.posicioX);
+        this.colisioBall.setY((float) this.posicioY);
         frame += 0.2;
         //1 fps =	0.3048	m/s
         //frame = 1 / 60
@@ -53,9 +50,16 @@ public class Ball {
     }
 
     public boolean hasFallen() {
-        System.out.println("Target X position: " + target.getPositionX());
+        //System.out.println("Target X position: " + target.getPositionX());
         if (this.posicioY > 576) {
-            System.out.println("Has fallado");
+            System.out.println("Ha llegado al suelo");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hit() {
+        if (this.colisioBall.intersects(this.target.getShape())) {
             return true;
         }
         return false;

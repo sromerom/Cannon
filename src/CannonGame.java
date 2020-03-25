@@ -13,9 +13,12 @@ public class CannonGame extends BasicGame {
     private Cannon cannon;
     private Target target;
     private Ball ball;
+    private int score;
+    private int intents = 5;
+    private boolean shaEncertat = false;
 
     public enum Estat {
-        MENU, JOC
+        MENU, JOC, FINAL
     }
 
     private Estat estatActual;
@@ -30,30 +33,52 @@ public class CannonGame extends BasicGame {
         this.cannon = new Cannon();
         this.target = new Target();
         this.fontMarcador = ResourceManager.getFont("WHITRABT.TTF", 20);
+        this.score = 0;
         this.estatActual = Estat.MENU;
     }
 
     @Override
     public void update(GameContainer gameContainer, int i) throws SlickException {
-        this.landscape.update();
-        this.cannon.update(gameContainer, i);
-        this.target.update();
-
         Input mou = gameContainer.getInput();
-        if (mou.isKeyPressed(Input.KEY_ENTER)) {
-            System.out.println("Empezamos");
-            this.estatActual = Estat.JOC;
-        }
-        if (mou.isKeyPressed(Input.KEY_SPACE)) {
-            System.out.println("Piiuum");
-            this.ball = cannon.fire();
-            this.ball.setTarget(this.target);
-        }
-        if (this.ball != null) {
-            this.ball.update();
-            if (this.ball.hasFallen()) {
-                this.ball = null;
-                this.target.reset();
+
+        if (this.estatActual.equals(Estat.MENU)) {
+            this.landscape.update();
+            if (mou.isKeyPressed(Input.KEY_ENTER)) {
+                System.out.println("Empezamos");
+                this.estatActual = Estat.JOC;
+            }
+        } else if (this.estatActual.equals(Estat.JOC)) {
+            this.landscape.update();
+            this.cannon.update(gameContainer, i);
+            this.target.update();
+
+            if (this.ball == null) {
+                if (mou.isKeyPressed(Input.KEY_SPACE)) {
+                    System.out.println("Piiuum");
+                    this.ball = cannon.fire();
+                    this.ball.setTarget(this.target);
+                }
+            }
+
+            if (this.ball != null) {
+                this.ball.update();
+                if (this.ball.hasFallen()) {
+                    this.ball = null;
+                    this.target.reset();
+                    if (!shaEncertat && this.score > 0) {
+                        System.out.println("Has perdido :(");
+                        this.score -= 30;
+                    }
+                    shaEncertat = false;
+                } else if (!this.ball.hasFallen()) {
+                    if (this.ball.hit()) {
+                        if (!shaEncertat) {
+                            System.out.println("Has ganado!!");
+                            shaEncertat = true;
+                            this.score += 100;
+                        }
+                    }
+                }
             }
         }
     }
@@ -79,8 +104,19 @@ public class CannonGame extends BasicGame {
             //Marcadors
             this.fontMarcador.drawString(20, 45, "Strenth: " + this.cannon.getStrength());
             this.fontMarcador.drawString(492, 45, "Angle: " + this.cannon.getRotation());
-            this.fontMarcador.drawString(850, 45, "Score: 0000");
+            this.fontMarcador.drawString(850, 45, "Score: " + parsePunts());
         }
 
+    }
+
+    private String parsePunts() {
+        StringBuilder res = new StringBuilder("");
+        int llargariaPunts = Integer.toString(this.score).length();
+        for (int i = 0; i <= 5 - llargariaPunts; i++) {
+            res.append("0");
+        }
+
+        res.append(this.score);
+        return res.toString();
     }
 }

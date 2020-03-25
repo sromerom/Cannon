@@ -21,16 +21,16 @@ public class Cannon {
         Input mou = gameContainer.getInput();
         if (mou.isKeyDown(Input.KEY_LEFT)) {
             updateRotation(-0.5);
-            System.out.println("Aumentamos angulo");
+            //System.out.println("Aumentamos angulo");
         } else if (mou.isKeyDown(Input.KEY_RIGHT)) {
             updateRotation(0.5);
-            System.out.println("Disminuimos angulo");
+            //System.out.println("Disminuimos angulo");
         } else if (mou.isKeyDown(Input.KEY_UP)) {
-            System.out.println("Aumentamos fuerza");
-            updateStrength(0.5);
+            //System.out.println("Aumentamos fuerza");
+            updateStrength(1);
         } else if (mou.isKeyDown(Input.KEY_DOWN)) {
-            System.out.println("Disminuimos fuerza");
-            updateStrength(-0.5);
+            //System.out.println("Disminuimos fuerza");
+            updateStrength(-1);
         }/*
         else if (mou.isKeyPressed(Input.KEY_SPACE)) {
             System.out.println("Piiuum");
