@@ -53,17 +53,17 @@ public class CannonGame extends BasicGame {
             this.cannon.update(gameContainer, i);
             this.target.update();
 
+            if (this.intents == 0) {
+                this.estatActual = Estat.FINAL;
+            }
+
+            if (this.disparsSeguits == 3) {
+                this.intents++;
+                this.disparsSeguits = 0;
+            }
+
             if (this.ball == null) {
                 if (mou.isKeyPressed(Input.KEY_SPACE)) {
-                    if (this.intents == 0) {
-                        this.estatActual = Estat.FINAL;
-                    }
-
-                    if (this.disparsSeguits == 3) {
-                        this.intents++;
-                        this.disparsSeguits = 0;
-                    }
-
                     this.ball = cannon.fire();
                     this.ball.setTarget(this.target);
                 }
@@ -77,8 +77,10 @@ public class CannonGame extends BasicGame {
                     if (!shaEncertat && this.score > 0) {
                         System.out.println("Has perdido :(");
                         this.score -= 30;
-                        this.intents--;
                         this.disparsSeguits = 0;
+                        this.intents--;
+                    } else if (!shaEncertat) {
+                        this.intents--;
                     }
                     shaEncertat = false;
                 } else if (!this.ball.hasFallen()) {
@@ -88,6 +90,7 @@ public class CannonGame extends BasicGame {
                             shaEncertat = true;
                             this.score += 100;
                             this.disparsSeguits++;
+                            this.target.setDyng(true);
                         }
                     }
                 }
@@ -102,8 +105,8 @@ public class CannonGame extends BasicGame {
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
-        System.out.println("Intents restants: " + intents);
-        System.out.println("Numero de dispars seguits: " + disparsSeguits);
+        //System.out.println("Intents restants: " + intents);
+        //System.out.println("Numero de dispars seguits: " + disparsSeguits);
         UnicodeFont textMenu = ResourceManager.getFont("WHITRABT.TTF", 40);
         if (this.estatActual.equals(Estat.MENU)) {
             this.landscape.render();

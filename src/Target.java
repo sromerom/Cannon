@@ -6,6 +6,7 @@ public class Target {
     private Image targetImage = ResourceManager.getImage("target.png");
     private Shape colisioTarget;
     private double positionX;
+    private double positionY = 500;
     private final int MAXIM = 890;
     private final int MINIM = 225;
     private int range = MAXIM - MINIM + 1;
@@ -16,21 +17,23 @@ public class Target {
 
     public Target() {
         this.positionX = rand;
-        colisioTarget = new Rectangle((float) this.positionX, 500, targetImage.getWidth(), targetImage.getHeight());
+        colisioTarget = new Rectangle((float) this.positionX, (float) positionY, targetImage.getWidth(), targetImage.getHeight());
     }
 
     public void render(Graphics g) throws SlickException {
-        this.targetImage.draw((float) this.positionX, 500);
+        this.targetImage.draw((float) this.positionX, (float) positionY);
         g.drawRect(colisioTarget.getX(), colisioTarget.getY(), colisioTarget.getWidth(), colisioTarget.getHeight());
     }
 
     public void update() {
         if (dyng) {
-
+            this.positionY+= 10;
         }
     }
 
     public void reset() {
+        this.dyng = false;
+        this.positionY = 500;
         System.out.println("Reiniciamos");
         this.rand = (int) (Math.random() * range) + MINIM;
         this.positionX = this.rand;
@@ -43,5 +46,21 @@ public class Target {
 
     public double getPositionX() {
         return positionX;
+    }
+
+    public boolean isDyng() {
+        return dyng;
+    }
+
+    public void setDyng(boolean dyng) {
+        this.dyng = dyng;
+    }
+
+    public double getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionY(double positionY) {
+        this.positionY = positionY;
     }
 }
