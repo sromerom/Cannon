@@ -27,7 +27,7 @@ public class Target {
 
     public void update() {
         if (dyng) {
-            this.positionY+= 10;
+            this.positionY+= 5;
         }
     }
 

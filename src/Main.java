@@ -7,7 +7,7 @@ public class Main {
             CannonGame cg = new CannonGame("Provant");
             AppGameContainer app = new AppGameContainer(cg);
             app.setTargetFrameRate(60);
-            app.setShowFPS(true);
+            app.setShowFPS(false);
             app.setDisplayMode(1024, 576, false);
             app.start();
         } catch (SlickException e) {

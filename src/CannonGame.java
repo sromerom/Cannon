@@ -1,20 +1,16 @@
 import org.newdawn.slick.*;
-import org.newdawn.slick.font.effects.ShadowEffect;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class CannonGame extends BasicGame {
 
     private UnicodeFont fontMarcador;
+    private Image heart;
     private Landscape landscape;
     private Cannon cannon;
     private Target target;
     private Ball ball;
     private int score;
-    private int intents = 5;
+    private int intents = 42;
     private int disparsSeguits = 0;
     private boolean shaEncertat = false;
 
@@ -36,6 +32,7 @@ public class CannonGame extends BasicGame {
         this.fontMarcador = ResourceManager.getFont("WHITRABT.TTF", 20);
         this.score = 0;
         this.estatActual = Estat.MENU;
+        this.heart = ResourceManager.getImage("heart.png");
     }
 
     @Override
@@ -126,6 +123,9 @@ public class CannonGame extends BasicGame {
             this.fontMarcador.drawString(20, 45, "Strenth: " + this.cannon.getStrength());
             this.fontMarcador.drawString(492, 45, "Angle: " + this.cannon.getRotation());
             this.fontMarcador.drawString(850, 45, "Score: " + parsePunts());
+
+            //Intents
+            dibuixaIntents();
         } else if (this.estatActual.equals(Estat.FINAL)) {
             this.fontMarcador.drawString(20, 45, "Actual Score: " + parsePunts(), Color.white);
             this.fontMarcador.drawString(750, 45, "Global Score: 0000", Color.white);
@@ -150,5 +150,24 @@ public class CannonGame extends BasicGame {
 
         res.append(this.score);
         return res.toString();
+    }
+
+    private void dibuixaIntents() {
+        int inicialX = 990;
+        int inicialY = 5;
+        UnicodeFont mesVides = ResourceManager.getFont("WHITRABT.TTF", 20);
+
+        if (this.intents >= 36) {
+            for (int i = 0; i < 36; i++) {
+                this.heart.draw(inicialX, inicialY, 30, 30);
+                inicialX -= 27;
+            }
+            this.fontMarcador.drawString(5, 13, "+" + (this.intents - 36));
+        } else {
+            for (int i = 0; i < this.intents; i++) {
+                this.heart.draw(inicialX, inicialY, 30, 30);
+                inicialX -= 27;
+            }
+        }
     }
 }
