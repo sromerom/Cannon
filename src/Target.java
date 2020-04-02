@@ -4,44 +4,40 @@ import org.newdawn.slick.geom.Shape;
 
 public class Target {
     private Image targetImage = ResourceManager.getImage("target.png");
-    private Shape colisioTarget;
+    private Shape collisionTarget;
     private double positionX;
     private double positionY = 500;
-    private final int MAXIM = 890;
-    private final int MINIM = 225;
-    private int range = MAXIM - MINIM + 1;
-    private int rand = (int) (Math.random() * range) + MINIM;
+    private final int MAX = 890;
+    private final int MIN = 225;
+    private int range = MAX - MIN + 1;
+    private int random = (int) (Math.random() * range) + MIN;
     private boolean dyng = false;
-    //private SpriteSheet sprite;
-    //private Animation anim;
 
     public Target() {
-        this.positionX = rand;
-        colisioTarget = new Rectangle((float) this.positionX, (float) positionY, targetImage.getWidth(), targetImage.getHeight());
+        this.positionX = random;
+        collisionTarget = new Rectangle((float) this.positionX, (float) positionY, targetImage.getWidth(), targetImage.getHeight());
     }
 
     public void render(Graphics g) throws SlickException {
         this.targetImage.draw((float) this.positionX, (float) positionY);
-        g.drawRect(colisioTarget.getX(), colisioTarget.getY(), colisioTarget.getWidth(), colisioTarget.getHeight());
     }
 
     public void update() {
-        if (dyng) {
-            this.positionY+= 5;
+        if (this.dyng) {
+            this.positionY += 5;
         }
     }
 
     public void reset() {
         this.dyng = false;
         this.positionY = 500;
-        System.out.println("Reiniciamos");
-        this.rand = (int) (Math.random() * range) + MINIM;
-        this.positionX = this.rand;
-        this.colisioTarget.setX((float) this.positionX);
+        this.random = (int) (Math.random() * range) + MIN;
+        this.positionX = this.random;
+        this.collisionTarget.setX((float) this.positionX);
     }
 
     public Shape getShape() {
-        return colisioTarget;
+        return collisionTarget;
     }
 
     public double getPositionX() {

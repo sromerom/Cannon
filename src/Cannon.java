@@ -3,8 +3,7 @@ import org.newdawn.slick.*;
 public class Cannon {
     private Image cannonImage = ResourceManager.getImage("cannon.png");
     private Image cannonBaseImage = ResourceManager.getImage("cannon_base.png");
-
-    private double rotation = 0;
+    private double rotation = -0;
     private double strength = 0;
 
     public void render() {
@@ -12,52 +11,21 @@ public class Cannon {
         this.cannonImage.rotate((float) this.rotation);
         this.cannonImage.draw(42, 470);
         this.cannonBaseImage.draw(42, 490);
-
-        //
         this.cannonImage.rotate((float) -(this.rotation));
     }
 
     public void update(GameContainer gameContainer, int i) {
         Input mou = gameContainer.getInput();
+
         if (mou.isKeyDown(Input.KEY_LEFT)) {
             updateRotation(-0.5);
-            //System.out.println("Aumentamos angulo");
         } else if (mou.isKeyDown(Input.KEY_RIGHT)) {
             updateRotation(0.5);
-            //System.out.println("Disminuimos angulo");
         } else if (mou.isKeyDown(Input.KEY_UP)) {
-            //System.out.println("Aumentamos fuerza");
             updateStrength(1);
         } else if (mou.isKeyDown(Input.KEY_DOWN)) {
-            //System.out.println("Disminuimos fuerza");
             updateStrength(-1);
-        }/*
-        else if (mou.isKeyPressed(Input.KEY_SPACE)) {
-            System.out.println("Piiuum");
-            fire();
-
         }
-        */
-        //Posam que el graus maxim sempre siguin 90 i el menor sigui 0
-        if (this.rotation < -90) {
-            this.rotation = -90;
-        }
-
-        if (this.rotation > 0) {
-            this.rotation = 0;
-        }
-
-        //Posam que la força pugui ser un maxim de 100 i un minim de 0
-
-        if (this.strength < 10) {
-            this.strength = 10;
-        }
-
-
-        if (this.strength > 100) {
-            this.strength = 100;
-        }
-
     }
 
     public Ball fire() {
@@ -66,10 +34,29 @@ public class Cannon {
 
     public void updateRotation(double deltaRotation) {
         this.rotation = this.rotation + deltaRotation;
+
+        //Posam que el graus maxim sempre siguin 90 i el menor sigui 0
+        if (this.rotation < -90) {
+            this.rotation = -90;
+        }
+
+        if (this.rotation > 0) {
+            this.rotation = 0;
+        }
     }
 
     public void updateStrength(double deltaStrength) {
         this.strength = this.strength + deltaStrength;
+
+        //Posam que la força pugui ser un maxim de 100 i un minim de 0
+        if (this.strength < 10) {
+            this.strength = 10;
+        }
+
+
+        if (this.strength > 100) {
+            this.strength = 100;
+        }
     }
 
     public double getRotation() {

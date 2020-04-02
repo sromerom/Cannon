@@ -4,7 +4,7 @@ import org.newdawn.slick.SlickException;
 public class Main {
     public static void main(String[] args) {
         try {
-            CannonGame cg = new CannonGame("Provant");
+            CannonGame cg = new CannonGame("Cannon Game");
             AppGameContainer app = new AppGameContainer(cg);
             app.setTargetFrameRate(60);
             app.setShowFPS(false);
