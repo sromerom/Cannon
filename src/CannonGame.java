@@ -77,7 +77,7 @@ public class CannonGame extends BasicGame {
                 if (this.ball.hasFallen()) {
                     this.ball = null;
                     this.target.reset();
-                    if (!shotTarget && this.score > 0) {
+                    if (!shotTarget && this.score > 20) {
                         this.score -= 30;
                         this.shotsInARow = 0;
                         this.attempts--;
