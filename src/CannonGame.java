@@ -67,7 +67,6 @@ public class CannonGame extends BasicGame {
             this.target.update();
 
             if (this.attempts == 0) {
-                //this.actualState = State.FINAL;
                 this.actualState = State.ADDSCORE;
             }
 
@@ -186,7 +185,7 @@ public class CannonGame extends BasicGame {
             if (move.isKeyPressed(Input.KEY_Z)) {
                 this.name = this.name + "Z";
             }
-            if (move.isKeyPressed(Input.KEY_DELETE)) {
+            if (move.isKeyPressed(Input.KEY_BACK)) {
                 String newString = "";
                 if (this.name.length() != 0) {
                     for (int j = 0; j < this.name.length() - 1; j++) {
@@ -195,14 +194,17 @@ public class CannonGame extends BasicGame {
                 }
 
                 this.name = newString;
+
             }
 
-            if (this.name.length() == 3) {
-                this.actualState = State.SCOREBOARD;
-                try {
-                    addData(parsePunts() + "-" + this.name);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if (move.isKeyPressed(Input.KEY_ENTER)) {
+                if (this.name.length() == 3) {
+                    this.actualState = State.SCOREBOARD;
+                    try {
+                        addData(parsePunts() + "-" + this.name);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -267,7 +269,7 @@ public class CannonGame extends BasicGame {
         } else if (this.actualState.equals(State.ADDSCORE)) {
             this.addScoreImage.draw(0, 0);
             UnicodeFont scoreboardFontBig = ResourceManager.getFont("WHITRABT.TTF", 70);
-            this.scoreboardFont.drawString(200, 150, "Congratulations! You have one score in the top 10 scores!");
+            this.scoreboardFont.drawString(300, 150, "Congratulations! You have a new score!");
             this.scoreboardFont.drawString(450, 200, "Add your name");
             Shape rec1 = new Rectangle(380, 350, 75, 5);
             Shape rec2 = new Rectangle(480, 350, 75, 5);
@@ -277,7 +279,7 @@ public class CannonGame extends BasicGame {
             graphics.fill(rec2);
             graphics.fill(rec3);
 
-
+            this.scoreboardFont.drawString(370, 470, "Press ENTER to continue", Color.white);
             if (this.name.length() == 1) {
                 scoreboardFontBig.drawString(395, 290, Character.toString(this.name.charAt(0)));
             } else if (this.name.length() == 2) {
@@ -308,7 +310,7 @@ public class CannonGame extends BasicGame {
             this.scoreboardFont.drawString(180, 370, "9TH", Color.gray);
             this.scoreboardFont.drawString(180, 400, "10TH", Color.darkGray);
 
-            this.scoreboardFont.drawString(350, 450, "Press ENTER to continue the game", Color.white);
+            this.scoreboardFont.drawString(350, 450, "Press ENTER to continue", Color.white);
 
 
             try {
