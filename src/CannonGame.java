@@ -1,8 +1,10 @@
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.BasicTriangulator;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -10,6 +12,10 @@ public class CannonGame extends BasicGame {
 
     private UnicodeFont scoreboardFont;
     private Image heartImage;
+    private Image addScoreImage;
+    private Image gameoverImage;
+    private boolean selectorGameOver = true;
+
     private Landscape landscape;
     private Cannon cannon;
     private Target target;
@@ -21,7 +27,7 @@ public class CannonGame extends BasicGame {
     private String name = "";
 
     public enum State {
-        MENU, GAME, ADDSCORE, FINAL
+        MENU, GAME, ADDSCORE, SCOREBOARD, GAMEOVER
     }
 
     private State actualState;
@@ -39,12 +45,17 @@ public class CannonGame extends BasicGame {
         this.score = 0;
         this.actualState = State.MENU;
         this.heartImage = ResourceManager.getImage("heart.png");
+        this.addScoreImage = ResourceManager.getImage("stateScoreImage.jpg");
+        this.gameoverImage = ResourceManager.getImage("gameOver.png");
     }
 
     @Override
     public void update(GameContainer gameContainer, int i) throws SlickException {
         Input move = gameContainer.getInput();
 
+        if (move.isKeyPressed(Input.KEY_ESCAPE)) {
+            System.exit(1);
+        }
         if (this.actualState.equals(State.MENU)) {
             this.landscape.update();
             if (move.isKeyPressed(Input.KEY_ENTER)) {
@@ -175,9 +186,19 @@ public class CannonGame extends BasicGame {
             if (move.isKeyPressed(Input.KEY_Z)) {
                 this.name = this.name + "Z";
             }
+            if (move.isKeyPressed(Input.KEY_DELETE)) {
+                String newString = "";
+                if (this.name.length() != 0) {
+                    for (int j = 0; j < this.name.length() - 1; j++) {
+                        newString = newString + Character.toString(this.name.charAt(j));
+                    }
+                }
+
+                this.name = newString;
+            }
 
             if (this.name.length() == 3) {
-                this.actualState = State.FINAL;
+                this.actualState = State.SCOREBOARD;
                 try {
                     addData(parsePunts() + "-" + this.name);
                 } catch (IOException e) {
@@ -185,7 +206,7 @@ public class CannonGame extends BasicGame {
                 }
             }
 
-        } else if (this.actualState.equals(State.FINAL)) {
+        } else if (this.actualState.equals(State.SCOREBOARD)) {
             if (move.isKeyPressed(Input.KEY_ENTER)) {
 
                 //Reiniciam atributs
@@ -195,9 +216,24 @@ public class CannonGame extends BasicGame {
                 this.ball = null;
                 this.shotTarget = false;
                 this.name = "";
-                this.actualState = State.MENU;
+                this.actualState = State.GAMEOVER;
+            }
+        } else if (this.actualState.equals(State.GAMEOVER)) {
+            if (move.isKeyPressed(Input.KEY_RIGHT)) {
+                this.selectorGameOver = false;
+            } else if (move.isKeyPressed(Input.KEY_LEFT)) {
+                this.selectorGameOver = true;
+            }
+
+            if (move.isKeyPressed(Input.KEY_ENTER)) {
+                if (this.selectorGameOver) {
+                    this.actualState = State.MENU;
+                } else {
+                    System.exit(1);
+                }
             }
         }
+
     }
 
     @Override
@@ -229,51 +265,79 @@ public class CannonGame extends BasicGame {
             dibuixaIntents();
 
         } else if (this.actualState.equals(State.ADDSCORE)) {
-            this.scoreboardFont.drawString(450, 330, "ADD YOUR NEW SCORE");
-            this.scoreboardFont.drawString(450, 370, this.name);
-        } else if (this.actualState.equals(State.FINAL)) {
+            this.addScoreImage.draw(0, 0);
+            UnicodeFont scoreboardFontBig = ResourceManager.getFont("WHITRABT.TTF", 70);
+            this.scoreboardFont.drawString(200, 150, "Congratulations! You have one score in the top 10 scores!");
+            this.scoreboardFont.drawString(450, 200, "Add your name");
+            Shape rec1 = new Rectangle(380, 350, 75, 5);
+            Shape rec2 = new Rectangle(480, 350, 75, 5);
+            Shape rec3 = new Rectangle(580, 350, 75, 5);
+
+            graphics.fill(rec1);
+            graphics.fill(rec2);
+            graphics.fill(rec3);
 
 
-            this.scoreboardFont.drawString(450, 45, "HIGH SCORES");
-            this.scoreboardFont.drawString(180, 100, "RANK");
-            this.scoreboardFont.drawString(180, 130, "1ST");
-            this.scoreboardFont.drawString(180, 160, "2ND");
-            this.scoreboardFont.drawString(180, 190, "3RD");
-            this.scoreboardFont.drawString(180, 220, "4TH");
-            this.scoreboardFont.drawString(180, 250, "5TH");
-            this.scoreboardFont.drawString(180, 280, "6TH");
-            this.scoreboardFont.drawString(180, 310, "7TH");
-            this.scoreboardFont.drawString(180, 340, "8TH");
-            this.scoreboardFont.drawString(180, 370, "9TH");
-            this.scoreboardFont.drawString(180, 400, "10TH");
+            if (this.name.length() == 1) {
+                scoreboardFontBig.drawString(395, 290, Character.toString(this.name.charAt(0)));
+            } else if (this.name.length() == 2) {
+                scoreboardFontBig.drawString(395, 290, Character.toString(this.name.charAt(0)));
+                scoreboardFontBig.drawString(495, 290, Character.toString(this.name.charAt(1)));
+            } else if (this.name.length() == 3) {
+                scoreboardFontBig.drawString(395, 290, Character.toString(this.name.charAt(0)));
+                scoreboardFontBig.drawString(495, 290, Character.toString(this.name.charAt(1)));
+                scoreboardFontBig.drawString(595, 290, Character.toString(this.name.charAt(2)));
+            }
+            //this.scoreboardFont.drawString(450, 370, this.name);
+        } else if (this.actualState.equals(State.SCOREBOARD)) {
 
-            this.scoreboardFont.drawString(480, 100, "SCORE");
-            this.scoreboardFont.drawString(780, 100, "NAME");
+
+            this.scoreboardFont.drawString(450, 45, "HIGH SCORES", Color.white);
+            this.scoreboardFont.drawString(180, 100, "RANK", Color.white);
+            this.scoreboardFont.drawString(480, 100, "SCORE", Color.white);
+            this.scoreboardFont.drawString(780, 100, "NAME", Color.white);
+
+            this.scoreboardFont.drawString(180, 130, "1ST", Color.red);
+            this.scoreboardFont.drawString(180, 160, "2ND", Color.orange);
+            this.scoreboardFont.drawString(180, 190, "3RD", Color.yellow);
+            this.scoreboardFont.drawString(180, 220, "4TH", Color.green);
+            this.scoreboardFont.drawString(180, 250, "5TH", Color.blue);
+            this.scoreboardFont.drawString(180, 280, "6TH", Color.cyan);
+            this.scoreboardFont.drawString(180, 310, "7TH", Color.magenta);
+            this.scoreboardFont.drawString(180, 340, "8TH", Color.pink);
+            this.scoreboardFont.drawString(180, 370, "9TH", Color.gray);
+            this.scoreboardFont.drawString(180, 400, "10TH", Color.darkGray);
+
+            this.scoreboardFont.drawString(350, 450, "Press ENTER to continue the game", Color.white);
 
 
             try {
                 String[] data = getData();
                 int posicio = 130;
+                Color[] colors = new Color[]{Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.cyan, Color.magenta, Color.pink, Color.gray, Color.darkGray};
                 for (int i = 0; i < data.length; i++) {
-                    if (data[i] != null) {
-                        String[] parts = data[i].split("-");
-                        String actualScore = parts[0];
-                        String actualName = parts[1];
+                    String[] parts = data[i].split("-");
+                    String actualScore = parts[0];
+                    String actualName = parts[1];
 
-                        this.scoreboardFont.drawString(480, posicio, actualScore);
-                        this.scoreboardFont.drawString(780, posicio, actualName);
-                    }
+                    this.scoreboardFont.drawString(480, posicio, actualScore, colors[i]);
+                    this.scoreboardFont.drawString(780, posicio, actualName, colors[i]);
                     posicio += 30;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            /*
-            this.scoreboardFont.drawString(20, 45, "Actual Score: " + parsePunts(), Color.white);
-            this.scoreboardFont.drawString(750, 45, "Global Score: 0000", Color.white);
-            textMenu.drawString(400, 288, "Game Over", Color.white);
-            this.scoreboardFont.drawString(400, 388, "Press ENTER to restart", Color.white);
-             */
+        } else if (this.actualState.equals(State.GAMEOVER)) {
+            this.gameoverImage.draw(0, 0);
+
+            if (this.selectorGameOver) {
+                graphics.drawRect(435, 405, 50, 25);
+            } else {
+                graphics.drawRect(543, 405, 50, 25);
+            }
+
+
+            graphics.setColor(Color.red);
         }
 
     }
@@ -311,19 +375,17 @@ public class CannonGame extends BasicGame {
         String[] partsActualScore = score.split("-");
         int nouScore = Integer.parseInt(partsActualScore[0]);
         boolean afegit = false;
-        File archivo = new File("maxScore.txt");
+        File archive = new File("maxScore.txt");
         BufferedWriter bw;
-        if (archivo.exists()) {
-            System.out.println("Existe");
-            String[] data = getData();
-            bw = new BufferedWriter(new FileWriter(archivo));
 
-            System.out.println("Tamaño: " + data.length);
+        if (archive.exists()) {
+            String[] data = getData();
+            bw = new BufferedWriter(new FileWriter(archive));
             for (int i = 0; i < data.length; i++) {
                 String[] parts = data[i].split("-");
                 int actualScore = Integer.parseInt(parts[0]);
 
-                System.out.println(nouScore +" > " + actualScore);
+
                 if (nouScore >= actualScore && !afegit) {
 
                     if (data.length >= 10) {
@@ -349,8 +411,7 @@ public class CannonGame extends BasicGame {
 
 
         } else {
-            System.out.println("No existe");
-            bw = new BufferedWriter(new FileWriter(archivo));
+            bw = new BufferedWriter(new FileWriter(archive));
             bw.write(score);
         }
         bw.close();
@@ -358,22 +419,19 @@ public class CannonGame extends BasicGame {
 
     private String[] getData() throws FileNotFoundException, IOException {
         List<String> resultList = new ArrayList<String>();
-        String cadena;
-        FileReader f = new FileReader("maxScore.txt");
-        BufferedReader b = new BufferedReader(f);
+        String line;
+        FileReader file = new FileReader("maxScore.txt");
+        BufferedReader buffer = new BufferedReader(file);
 
         int i = 0;
-        while ((cadena = b.readLine()) != null) {
-            resultList.add(cadena);
-            //result[i] = cadena;
+        while ((line = buffer.readLine()) != null) {
+            resultList.add(line);
             i++;
         }
-        b.close();
+        buffer.close();
 
         String[] result = new String[resultList.size()];
         resultList.toArray(result);
         return result;
     }
-
-
 }
