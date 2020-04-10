@@ -22,7 +22,7 @@ public class CannonGame extends BasicGame {
     private Target target;
     private Ball ball;
     private int score;
-    private int attempts = 5;
+    private int attempts = 40;
     private int shotsInARow = 0;
     private boolean shotTarget = false;
     private String name = "";
@@ -68,6 +68,7 @@ public class CannonGame extends BasicGame {
         //Si ens trobam en l'estat MENU, doncs nomes carregarem el update de landscape (el fons i el nigul)
         if (this.actualState.equals(State.MENU)) {
             this.landscape.update();
+
             //I en el moment que es presioni la tecla ENTER, voldra dir haurem de canviar d'estat al GAME.
             if (move.isKeyPressed(Input.KEY_ENTER)) {
                 this.actualState = State.GAME;
@@ -77,17 +78,6 @@ public class CannonGame extends BasicGame {
             this.landscape.update();
             this.cannon.update(gameContainer, i);
             this.target.update();
-
-            //Nomes canviarem d'estat quan el intents o vides sigui igual a 0
-            if (this.attempts == 0) {
-                this.actualState = State.ADDSCORE;
-            }
-
-            //Si el jugador encerta mes de 3 vegades seguides, doncs l'hi sumam un intent mes
-            if (this.shotsInARow == 3) {
-                this.attempts++;
-                this.shotsInARow = 0;
-            }
 
             //Nomes podem disparar una pilota quan no hi hagui cap disparada.
             if (this.ball == null) {
@@ -109,25 +99,37 @@ public class CannonGame extends BasicGame {
                     this.ball = null;
                     this.target.reset();
 
-                    //Nomes llevarem punts sempre i quan el score actual sigui major a 20. Si aixo no es compleix simplement llevarem intents
-                    if (!shotTarget && this.score > 20) {
+                    //Nomes llevarem punts sempre i quan el score actual sigui major a 30. Si aixo no es compleix simplement llevarem intents
+                    if (!this.shotTarget && this.score > 30) {
                         this.score -= 30;
                         this.shotsInARow = 0;
                         this.attempts--;
-                    } else if (!shotTarget) {
+                    } else if (!this.shotTarget) {
                         this.attempts--;
+                        this.shotsInARow = 0;
                     }
-                    shotTarget = false;
+                    this.shotTarget = false;
 
                     //Si no ha fallat encara, i el jugador ha encertat, doncs sumarem puntuacio al Score i posarem com true el boolea Dyng de la classe target.
-                } else if (!this.ball.hasFallen()) {
+                } else {
                     if (this.ball.hit() && !shotTarget) {
-                        shotTarget = true;
+                        this.shotTarget = true;
                         this.score += 100;
                         this.shotsInARow++;
                         this.target.setDyng(true);
                     }
                 }
+            }
+
+            //Nomes canviarem d'estat quan el intents o vides sigui igual a 0
+            if (this.attempts == 0) {
+                this.actualState = State.ADDSCORE;
+            }
+
+            //Si el jugador encerta mes de 3 vegades seguides, doncs l'hi sumam un intent mes
+            if (this.shotsInARow == 3) {
+                this.attempts++;
+                this.shotsInARow = 0;
             }
             //Com que en l'estat ADDSCORE fa falta que el jugador introduiexi el seu nom, doncs hem de habilitar el input de totes les lletres del teclat
         } else if (this.actualState.equals(State.ADDSCORE)) {
@@ -211,14 +213,12 @@ public class CannonGame extends BasicGame {
             }
             //A mes de les tecles, també hem de permetre al jugador esborrar les lletres introduides. Aixo ho farem amb la tecla retroceso
             if (move.isKeyPressed(Input.KEY_BACK)) {
-                String newString = "";
-                if (this.name.length() != 0) {
-                    for (int j = 0; j < this.name.length() - 1; j++) {
-                        newString = newString + Character.toString(this.name.charAt(j));
-                    }
+                StringBuilder newString = new StringBuilder();
+                for (int j = 0; j < this.name.length() - 1; j++) {
+                    newString.append(Character.toString(this.name.charAt(j)));
                 }
 
-                this.name = newString;
+                this.name = newString.toString();
 
             }
 
@@ -432,8 +432,7 @@ public class CannonGame extends BasicGame {
     //Metode que ens permet escrire el resultat en un fitxer txt, per despres llegir-lo i poder carregar tots els scores. Aixo ens permet guardar tots els scores una vegada
     // el jugador ha tancat el joc.
     private void addData(String score) throws IOException {
-        String[] partsActualScore = score.split("-");
-        int nouScore = Integer.parseInt(partsActualScore[0]);
+        int nouScore = Integer.parseInt(score.split("-")[0]);
         boolean afegit = false;
         File archive = new File("maxScore.txt");
         BufferedWriter bw;
@@ -443,8 +442,7 @@ public class CannonGame extends BasicGame {
             String[] data = getData();
             bw = new BufferedWriter(new FileWriter(archive));
             for (int i = 0; i < data.length; i++) {
-                String[] parts = data[i].split("-");
-                int actualScore = Integer.parseInt(parts[0]);
+                int actualScore = Integer.parseInt(data[i].split("-")[0]);
 
                 if (nouScore >= actualScore && !afegit) {
                     if (data.length >= 10) {
@@ -483,10 +481,8 @@ public class CannonGame extends BasicGame {
         FileReader file = new FileReader("maxScore.txt");
         BufferedReader buffer = new BufferedReader(file);
 
-        int i = 0;
         while ((line = buffer.readLine()) != null) {
             resultList.add(line);
-            i++;
         }
         buffer.close();
 

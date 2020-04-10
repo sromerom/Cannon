@@ -17,23 +17,27 @@ public class Ball {
     private double frame = 0;
 
     //Atributs que ens permet fer l'animacio quan l'usuari encerta en el target
-    private boolean hit = false;
     private boolean animation = false;
 
     //Constructor Ball on l'hi passarem per parametre el angulo i la força en la que ha sigut disparada la pilota en questio
     public Ball(double angle, double strength) {
         this.angle = angle;
         this.strength = strength;
-        //Com que la pilota te un shape de colisions a igual que el target, doncs en aquest constructor l'ha crearem. En aquest cas, el shape sera un cercle
+        //Com que la pilota te un shape de colisions a igual que el target, doncs en aquest constructor tambe la crearem. En aquest cas, el shape sera un cercle
+        this.ballImage.setCenterOfRotation(this.ballImage.getWidth() / 2, this.ballImage.getHeight() / 2);
+
         this.collisionBall = new Circle((float) initialPositionX, (float) initialPositionY, ballImage.getWidth() / 2);
     }
 
     //El metode update ens permet anar actualizant les posicions X i Y segons el resultat que ens dona la formula del tir parabolic
     public void update() {
 
+        //Fer una rotacio constant de la pilota
+        this.ballImage.rotate(5);
+
         //Si encara no s'ha encertat el tir, cridam al metode calculParabolic que ens calcula quina es la posicio X i Y utilitzant la formula del calcula parabolic. A mes
         // de calcular-los, tambe actualitza els atributs actualPositionX i actualPositionY.
-        if (!hit) {
+        if (!this.target.isDyng()) {
             calculParabolic(this.angle, this.strength, this.initialPositionX, this.initialPositionY);
         } else {
             // Si hit es true, voldra dir que s'ha encertat y que ja es pot fer l'animacio. Aquesta animacio torna a ser un moviment parabolic
@@ -61,10 +65,9 @@ public class Ball {
         this.ballImage.draw((float) this.actualPositionX, (float) this.actualPositionY);
     }
 
-    //Metode que ens permet saber si el tir del jugador ha sigut certer o si al contrari ha fallat. Considedarem que el jugador ha fallat
-    // si la pilota es troba per davall del limit de la pantalla (> 576)
+    //Metode que ens permet saber si el tir del jugador ha arribat a terra o no. Considedarem que la pilota ha arribat a terra
+    // si es troba per davall del limit de la pantalla (> 576)
     public boolean hasFallen() {
-
         if (this.actualPositionY > 576) {
             return true;
         }
@@ -73,18 +76,13 @@ public class Ball {
 
     //Metode que ens permet saber si la pilota i el target estan colisionant. Gracies al metode intersects que trobam en l'objecte Shape ho podem fer
     public boolean hit() {
-
-        if (this.collisionBall.intersects(this.target.getShape())) {
-            this.hit = true;
-            return true;
-        }
-        return false;
+        return this.collisionBall.intersects(this.target.getShape());
     }
 
     //Metode que ens permet calcular quines serien les posicions segons en angle i la força en un tir parabolic.
     private void calculParabolic(double angle, double strength, double xInicial, double yInicial) {
         double angleActual = angle * -1 * Math.PI / 180f;
-        double grav = (-9.8) * -1;
+        double grav = -9.8 * (-1);
 
         //Calculam la velocitat tant per la part vertical com la horizontal
         double vx = strength * Math.cos(angleActual);
