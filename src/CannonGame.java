@@ -22,7 +22,7 @@ public class CannonGame extends BasicGame {
     private Target target;
     private Ball ball;
     private int score;
-    private int attempts = 40;
+    private int attempts = 5;
     private int shotsInARow = 0;
     private boolean shotTarget = false;
     private String name = "";
@@ -356,13 +356,13 @@ public class CannonGame extends BasicGame {
             this.scoreboardFont.drawString(180, 340, "8TH", Color.pink);
             this.scoreboardFont.drawString(180, 370, "9TH", Color.gray);
             this.scoreboardFont.drawString(180, 400, "10TH", Color.darkGray);
-            this.scoreboardFont.drawString(350, 450, "Press ENTER to continue", Color.white);
+            this.scoreboardFont.drawString(390, 450, "Press ENTER to continue", Color.white);
 
             try {
                 //S'ha aconsegueix tots els scores i noms gracies al metode getData, que ens permet aconseguir tota la informacio del txt
                 String[] data = getData();
                 int posicio = 130;
-                Color[] colors = new Color[]{Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.cyan, Color.magenta, Color.pink, Color.gray, Color.darkGray};
+                Color[] colors = new Color[]{Color.red, Color.orange, Color.yellow, Color.green, Color.blue, Color.cyan, Color.magenta, Color.pink, Color.gray, Color.darkGray, Color.darkGray};
 
                 //I recorrem el array de puntuacions, separant-los gracies al metode split.
                 for (int i = 0; i < data.length; i++) {
@@ -444,17 +444,11 @@ public class CannonGame extends BasicGame {
             for (int i = 0; i < data.length; i++) {
                 int actualScore = Integer.parseInt(data[i].split("-")[0]);
 
-                if (nouScore >= actualScore && !afegit) {
-                    if (data.length >= 10) {
-                        bw.write(score);
-                        bw.newLine();
-                    } else {
-                        bw.write(score);
-                        bw.newLine();
-                        bw.write(data[i]);
-                        bw.newLine();
-                    }
-
+                if (nouScore > actualScore && !afegit) {
+                    bw.write(score);
+                    bw.newLine();
+                    bw.write(data[i]);
+                    bw.newLine();
                     afegit = true;
                 } else {
                     bw.write(data[i]);
@@ -465,8 +459,6 @@ public class CannonGame extends BasicGame {
             if (!afegit && data.length < 10) {
                 bw.write(score);
             }
-
-
         } else {
             bw = new BufferedWriter(new FileWriter(archive));
             bw.write(score);
@@ -483,6 +475,11 @@ public class CannonGame extends BasicGame {
 
         while ((line = buffer.readLine()) != null) {
             resultList.add(line);
+        }
+
+        //Eliminiam l'ultim registre innecessari
+        if (resultList.size() > 10) {
+            resultList.remove(resultList.get(resultList.size() - 1));
         }
         buffer.close();
 
