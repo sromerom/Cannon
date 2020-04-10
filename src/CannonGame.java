@@ -62,7 +62,7 @@ public class CannonGame extends BasicGame {
 
         //Si es pren la tecla ESC, doncs sortirem del joc. Es podra sortir del joc en tot moment amb la tecla ESC.
         if (move.isKeyPressed(Input.KEY_ESCAPE)) {
-            System.exit(1);
+            System.exit(0);
         }
 
         //Si ens trobam en l'estat MENU, doncs nomes carregarem el update de landscape (el fons i el nigul)
@@ -263,7 +263,7 @@ public class CannonGame extends BasicGame {
 
                     //Si no vol seguir jugant, simplementar tancarem el joc
                 } else {
-                    System.exit(1);
+                    System.exit(0);
                 }
             }
         }
